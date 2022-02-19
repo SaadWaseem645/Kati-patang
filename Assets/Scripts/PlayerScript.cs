@@ -251,6 +251,12 @@ public class PlayerScript : MonoBehaviour
                 other.gameObject.SetActive(false);
                 break;
 
+            case "Obstacle":
+                animator.Play("BoyStumble");
+                stopTouch = true;
+                StartCoroutine(startTouch(1));
+                break;
+
         }
     }
 
