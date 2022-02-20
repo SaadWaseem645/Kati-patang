@@ -21,6 +21,7 @@ public class SmallKiteScript : MonoBehaviour
     private float rotationSpeed;
 
     private bool stopped = false;
+    private string motionDirection = "forward";
 
     void Start()
     {
@@ -31,11 +32,20 @@ public class SmallKiteScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((transform.position.z - player.transform.position.z) >= playerDistance && !stopped)
+        if ((transform.position.z - player.transform.position.z) >= playerDistance)
             speed = playerSpeed;
-        transform.Translate(Vector3.forward * Time.deltaTime * speed, Space.World);
+        else
+            speed = fastSpeed;
 
-        if(stopped && transform.position.y > floatDownPosition)
+        if (!stopped)
+        {
+            if (motionDirection.Equals("forward"))
+                transform.Translate(Vector3.forward * Time.deltaTime * speed, Space.World);
+            else if (motionDirection.Equals("up"))
+                transform.Translate(Vector3.up * Time.deltaTime * speed, Space.World);
+        }
+
+        if (stopped && transform.position.y > player.transform.position.y + floatDownPosition)
             transform.Translate(-Vector3.up * Time.deltaTime * playerSpeed, Space.World);
     }
 
@@ -50,6 +60,12 @@ public class SmallKiteScript : MonoBehaviour
             case "KiteLander":
                 speed = 0;
                 stopped = true;
+                break;
+            case "KiteLanderForward":
+                motionDirection = "forward";
+                break;
+            case "KiteLanderUp":
+                motionDirection = "up";
                 break;
         }
     }
