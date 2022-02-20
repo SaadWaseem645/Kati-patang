@@ -33,6 +33,7 @@ public class PlayerScript : MonoBehaviour
     private bool stopTouch = false;
     private bool hasJumped = false;
     private bool hasCartJumped = false;
+    private bool isFlying = false;
     private float swipeRange = 200.0f;
     private float tapRange;
 
@@ -155,7 +156,7 @@ public class PlayerScript : MonoBehaviour
             Vector2 Distance = currentPosition - startTouchPosition;
 
 
-            if (!stopTouch && !hasJumped)
+            if (!stopTouch && !hasJumped && !isFlying)
             {
                 if(Distance.y < -swipeRange)
                 {
@@ -241,8 +242,9 @@ public class PlayerScript : MonoBehaviour
                     Destroy(child.GetComponent<Rigidbody>());
                     child.parent = transform;
                     child.tag = "BigKite";
+                    isFlying = true;
                     child.localPosition = new Vector3(0, 4.7f, 0);
-                    child.localScale = new Vector3(120, 120, 120);
+                    //child.localScale = new Vector3(120, 120, 120);
                     child.localEulerAngles = new Vector3(73, 0, child.localEulerAngles.z);
                     rb.useGravity = false;
 
