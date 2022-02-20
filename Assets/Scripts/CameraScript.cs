@@ -16,7 +16,8 @@ public class CameraScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        offsetPosition = transform.position;
+        offsetPosition = transform.position - player.transform.position;
+        //Debug.Log(offsetPosition);
     }
 
     // Update is called once per frame

@@ -194,7 +194,7 @@ public class PlayerScript : MonoBehaviour
     {
         switch (other.tag)
         {
-            case "String":
+            case "PickupKite":
                 other.gameObject.SetActive(false);
                 break;
 
