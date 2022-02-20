@@ -5,14 +5,11 @@ public class PlayerScore : MonoBehaviour
     [SerializeField]
     private GameObject bigKite;
 
-    private SmallKiteScript kiteScript;
-
     private int lives = 3;
     private int score = 0;
 
     void Start()
     {
-        kiteScript = bigKite.GetComponent<SmallKiteScript>();
     }
 
     void Update()
@@ -30,6 +27,8 @@ public class PlayerScore : MonoBehaviour
                 break;
             case "PickupKite":
                 score++;
+                Vector3 kiteScale = bigKite.transform.localScale;
+                bigKite.transform.localScale = new Vector3(kiteScale.x + 0.1f, kiteScale.y + 0.1f, kiteScale.z + 0.1f);
                 break;
         }
     }
