@@ -4,13 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - String
   - Cart
   - RoofPath
   - KiteLander
   - SmallKite
   - BigKite
   - Obstacle
+  - PickupKite
   layers:
   - Default
   - TransparentFX
