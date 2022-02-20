@@ -243,7 +243,7 @@ public class PlayerScript : MonoBehaviour
                     child.parent = transform;
                     child.tag = "BigKite";
                     isFlying = true;
-                    child.localPosition = new Vector3(0, 4.7f, 0);
+                    child.localPosition = new Vector3(0, 6f, 0);
                     //child.localScale = new Vector3(120, 120, 120);
                     child.localEulerAngles = new Vector3(73, 0, child.localEulerAngles.z);
                     rb.useGravity = false;

@@ -11,6 +11,8 @@ TagManager:
   - BigKite
   - Obstacle
   - PickupKite
+  - KiteLanderUp
+  - KiteLanderForward
   layers:
   - Default
   - TransparentFX
