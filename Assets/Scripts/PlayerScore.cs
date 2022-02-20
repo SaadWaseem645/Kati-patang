@@ -1,10 +1,14 @@
 using UnityEngine;
-
+using UnityEngine.UI;
 public class PlayerScore : MonoBehaviour
 {
     [SerializeField]
     private GameObject bigKite;
 
+
+
+    [SerializeField]
+    private Text scoreTxt, KiteTxt, FlyTxt;
     private SmallKiteScript kiteScript;
 
     private int lives = 3;
@@ -16,7 +20,7 @@ public class PlayerScore : MonoBehaviour
     }
 
     void Update()
-    { 
+    {
         Debug.Log("Lives: " + lives);
         Debug.Log("Pickups: " + score);
     }
@@ -30,6 +34,7 @@ public class PlayerScore : MonoBehaviour
                 break;
             case "PickupKite":
                 score++;
+                scoreTxt.text = score.ToString();
                 break;
         }
     }

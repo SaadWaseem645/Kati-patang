@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
@@ -29,7 +30,8 @@ public class PlayerScript : MonoBehaviour
     private Vector2 endTouchPosition;
 
     private Animator animator;
-
+    [SerializeField]
+    private Text scoreTxt, KiteTxt, FlyTxt;
     private bool stopTouch = false;
     private bool hasJumped = false;
     private bool hasCartJumped = false;
@@ -39,6 +41,8 @@ public class PlayerScript : MonoBehaviour
     private Rigidbody rb;
 
     private int position = 0;
+
+    public int kite, fly, score;
 
     private void Awake()
     {
@@ -52,12 +56,13 @@ public class PlayerScript : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        score = kite = fly = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
         transform.Translate(Vector3.forward * Time.deltaTime * speed);
         checkTouch();
         Move();
@@ -66,7 +71,7 @@ public class PlayerScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-       
+
         //Swipe();
     }
 
@@ -99,7 +104,7 @@ public class PlayerScript : MonoBehaviour
 
     private void Move()
     {
-        
+
         if (Touch.activeTouches.Count > 0 && Touch.activeTouches[0].phase == UnityEngine.InputSystem.TouchPhase.Began)
         {
             startTouchPosition = Touch.activeTouches[0].screenPosition;
@@ -112,14 +117,14 @@ public class PlayerScript : MonoBehaviour
             Vector2 distance = currentPosition - startTouchPosition;
 
             //if (distance.x < 0)
-//{
-                //float veloctyY = rb.velocity.y;
-               //Vector3 velocityComponent = Vector3.Lerp(rb.velocity, (Touch.activeTouches[0].delta.x * transform.right * horizontalSpeed), lerpPct);
-                //.velocity
-                //rb.velocity = Vector3.Lerp(rb.velocity, Touch.activeTouches[0].delta.x * transform.right * horizontalSpeed, lerpPct);
-                //transform.Translate(-Vector3.right * Time.deltaTime * horizontalSpeed);
+            //{
+            //float veloctyY = rb.velocity.y;
+            //Vector3 velocityComponent = Vector3.Lerp(rb.velocity, (Touch.activeTouches[0].delta.x * transform.right * horizontalSpeed), lerpPct);
+            //.velocity
+            //rb.velocity = Vector3.Lerp(rb.velocity, Touch.activeTouches[0].delta.x * transform.right * horizontalSpeed, lerpPct);
+            //transform.Translate(-Vector3.right * Time.deltaTime * horizontalSpeed);
             //}
-            
+
             if (distance.x > 0 || distance.x < 0)
             {
                 float velocityY = rb.velocity.y;
@@ -144,12 +149,12 @@ public class PlayerScript : MonoBehaviour
 
     public void Swipe()
     {
-        if(Touch.activeTouches.Count > 0 && Touch.activeTouches[0].phase == UnityEngine.InputSystem.TouchPhase.Began)
+        if (Touch.activeTouches.Count > 0 && Touch.activeTouches[0].phase == UnityEngine.InputSystem.TouchPhase.Began)
         {
             startTouchPosition = Touch.activeTouches[0].screenPosition;
         }
 
-        if(Touch.activeTouches.Count > 0 && Touch.activeTouches[0].phase == UnityEngine.InputSystem.TouchPhase.Moved)
+        if (Touch.activeTouches.Count > 0 && Touch.activeTouches[0].phase == UnityEngine.InputSystem.TouchPhase.Moved)
         {
             currentPosition = Touch.activeTouches[0].screenPosition;
             Vector2 Distance = currentPosition - startTouchPosition;
@@ -157,7 +162,7 @@ public class PlayerScript : MonoBehaviour
 
             if (!stopTouch && !hasJumped)
             {
-                if(Distance.y < -swipeRange)
+                if (Distance.y < -swipeRange)
                 {
                     //animator.Play("BoySlideDemo");
                     Debug.Log("Down");
@@ -178,7 +183,7 @@ public class PlayerScript : MonoBehaviour
 
         }
 
-        if(Touch.activeTouches.Count > 0 && Touch.activeTouches[0].phase == UnityEngine.InputSystem.TouchPhase.Ended)
+        if (Touch.activeTouches.Count > 0 && Touch.activeTouches[0].phase == UnityEngine.InputSystem.TouchPhase.Ended)
         {
             hasJumped = false;
         }
@@ -206,7 +211,7 @@ public class PlayerScript : MonoBehaviour
 
                     bool jumpHigh = false;
 
-                    foreach(Transform child in transform)
+                    foreach (Transform child in transform)
                         if (child.CompareTag("SmallKite"))
                             jumpHigh = true;
 
@@ -218,10 +223,11 @@ public class PlayerScript : MonoBehaviour
                     speed = speed * 1.2f;
                     stopTouch = true;
                     other.transform.Rotate(new Vector3(0, 0, 20), Space.Self);
+                    score += 1;
                 }
                 break;
             case "SmallKite":
-                foreach(Transform child in other.transform)
+                foreach (Transform child in other.transform)
                 {
                     Destroy(child.GetComponent<Rigidbody>());
                     child.parent = transform;
@@ -229,7 +235,8 @@ public class PlayerScript : MonoBehaviour
                     child.localPosition = new Vector3(0, 4.7f, -1.5f);
                     child.localScale = new Vector3(120, 120, 120);
                     child.localEulerAngles = new Vector3(child.localEulerAngles.x, 0, child.localEulerAngles.z);
-
+                    kite++;
+                    score += 1;
                 }
 
                 other.gameObject.SetActive(false);
@@ -245,6 +252,8 @@ public class PlayerScript : MonoBehaviour
                     child.localScale = new Vector3(120, 120, 120);
                     child.localEulerAngles = new Vector3(73, 0, child.localEulerAngles.z);
                     rb.useGravity = false;
+                    fly += 1;
+                    score += 3;
 
                 }
 
@@ -255,9 +264,13 @@ public class PlayerScript : MonoBehaviour
                 animator.Play("BoyStumble");
                 stopTouch = true;
                 StartCoroutine(startTouch(1));
+                score -= 1;
                 break;
 
         }
+        scoreTxt.text = score.ToString();
+        FlyTxt.text = fly.ToString();
+        KiteTxt.text = kite.ToString();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -282,7 +295,7 @@ public class PlayerScript : MonoBehaviour
     IEnumerator resetSpeed(int secs)
     {
         yield return new WaitForSeconds(secs);
-        
+
 
     }
 
