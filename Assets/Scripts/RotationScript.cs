@@ -23,6 +23,6 @@ public class RotationScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(X ? speed : 0f, Y ? speed : 0f, Z ? speed : 0f);
+        transform.Rotate(X ? speed : 0f, Y ? speed : 0f, Z ? speed : 0f, Space.Self);
     }
 }
