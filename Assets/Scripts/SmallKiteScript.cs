@@ -51,7 +51,7 @@ public class SmallKiteScript : MonoBehaviour
 
     void rotateKite()
     {
-           transform.Rotate(0, rotationSpeed * Time.deltaTime, 0, Space.Self);
+        transform.Rotate(0, rotationSpeed * Time.deltaTime, 0, Space.Self);
     }
 
     private void OnTriggerEnter(Collider other)

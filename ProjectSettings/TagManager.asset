@@ -13,6 +13,8 @@ TagManager:
   - PickupKite
   - KiteLanderUp
   - KiteLanderForward
+  - ObstacleRight
+  - ObstacleLeft
   layers:
   - Default
   - TransparentFX
