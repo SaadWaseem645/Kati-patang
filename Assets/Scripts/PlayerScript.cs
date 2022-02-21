@@ -258,6 +258,16 @@ public class PlayerScript : MonoBehaviour
                 stopTouch = true;
                 StartCoroutine(startTouch(1));
                 break;
+            case "ObstacleLeft":
+                animator.Play("BoyShoulderHitLeft");
+                stopTouch = true;
+                StartCoroutine(startTouch(1));
+                break;
+            case "ObstacleRight":
+                animator.Play("BoyShoulderHitRight");
+                stopTouch = true;
+                StartCoroutine(startTouch(1));
+                break;
 
         }
     }
