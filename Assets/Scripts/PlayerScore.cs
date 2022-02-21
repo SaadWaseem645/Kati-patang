@@ -5,6 +5,9 @@ public class PlayerScore : MonoBehaviour
     [SerializeField]
     private GameObject bigKite;
 
+    [SerializeField]
+    private float kiteScaleSize = 0.1f;
+
     private int lives = 3;
     private int score = 0;
 
@@ -28,7 +31,7 @@ public class PlayerScore : MonoBehaviour
             case "PickupKite":
                 score++;
                 Vector3 kiteScale = bigKite.transform.localScale;
-                bigKite.transform.localScale = new Vector3(kiteScale.x + 0.1f, kiteScale.y + 0.1f, kiteScale.z + 0.1f);
+                bigKite.transform.localScale = new Vector3(kiteScale.x + kiteScaleSize, kiteScale.y + kiteScaleSize, kiteScale.z + kiteScaleSize);
                 break;
         }
     }
