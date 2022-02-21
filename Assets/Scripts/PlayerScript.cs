@@ -289,6 +289,13 @@ public class PlayerScript : MonoBehaviour
                             Destroy(child.gameObject);
                 }
                 break;
+
+            case "Rail":
+                if(transform.position.x > 0)
+                    rb.AddForce(Vector3.right * 2, ForceMode.Impulse);
+                else
+                    rb.AddForce(-Vector3.right * 2, ForceMode.Impulse);
+                break;
         }
     }
 
