@@ -1800,7 +1800,7 @@ Camera:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
-  m_FOVAxisMode: 0
+  m_FOVAxisMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
   m_FocalLength: 50
@@ -3504,6 +3504,20 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 216218341956514000, guid: f7991dc8be37eee4c8d0f46a0c991ee5, type: 3}
   m_PrefabInstance: {fileID: 1135259767564359800}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &919132149075585193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149075585192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ced14147402b74a4ea05c67202a82914, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectiles:
+  - {fileID: 631089043049927936, guid: 9d99b2b23589cab4f93bee10558a19d1, type: 3}
 --- !u!114 &919132149075585198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3517,6 +3531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bigKite: {fileID: 327380271}
+  kiteScaleSize: 0.03
 --- !u!1001 &1135259767564359800
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3571,6 +3586,10 @@ PrefabInstance:
     - target: {fileID: 597845992016816746, guid: f7991dc8be37eee4c8d0f46a0c991ee5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1135259766404595932, guid: f7991dc8be37eee4c8d0f46a0c991ee5, type: 3}
+      propertyPath: speed
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1135259766404595932, guid: f7991dc8be37eee4c8d0f46a0c991ee5, type: 3}
       propertyPath: jumpHeight
@@ -3643,6 +3662,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89433549e2e37e04b89238d88e4c1154, type: 3}
+--- !u!4 &2268475519710611019 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2432298230185003225, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+  m_PrefabInstance: {fileID: 4520061709338562194}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3818279571098343921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6129050369295183465}
+  m_Layer: 0
+  m_Name: ProjectileSummoners
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1001 &4342668967290689930
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3700,6 +3740,78 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 037ebcb43fba5894fb11ecaa8f1d60f5, type: 3}
+--- !u!1001 &4520061709338562194
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6129050369295183465}
+    m_Modifications:
+    - target: {fileID: 2432298230185003225, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432298230185003225, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432298230185003225, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432298230185003225, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432298230185003225, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432298230185003225, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432298230185003225, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432298230185003225, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432298230185003225, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432298230185003225, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432298230185003225, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4508363655450565789, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+      propertyPath: m_Name
+      value: Cube
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f2e03a7f98169204196c86e7a0d38086, type: 3}
+--- !u!4 &6129050369295183465
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3818279571098343921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 24.97}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2268475519710611019}
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &8350964460315933852 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7648639554798235183, guid: 89433549e2e37e04b89238d88e4c1154, type: 3}
@@ -3817,6 +3929,14 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 919132149075585192}
+    - target: {fileID: 9150090304280751585, guid: eced04fea8a243c4aa306c5cf57834e6, type: 3}
+      propertyPath: fastSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150090304280751585, guid: eced04fea8a243c4aa306c5cf57834e6, type: 3}
+      propertyPath: playerSpeed
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 9150090304280751614, guid: eced04fea8a243c4aa306c5cf57834e6, type: 3}
       propertyPath: m_Name
       value: KiteHolder

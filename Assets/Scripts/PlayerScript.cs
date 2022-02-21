@@ -206,6 +206,7 @@ public class PlayerScript : MonoBehaviour
                     animator.Play("BoyJumpContinous");
 
                     bool jumpHigh = false;
+                    rb.velocity = Vector3.zero;
 
                     foreach(Transform child in transform)
                         if (child.CompareTag("SmallKite"))

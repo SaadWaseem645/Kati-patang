@@ -15,6 +15,7 @@ TagManager:
   - KiteLanderForward
   - ObstacleRight
   - ObstacleLeft
+  - ProjectileSummoner
   layers:
   - Default
   - TransparentFX
