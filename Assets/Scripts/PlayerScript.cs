@@ -19,10 +19,14 @@ public class PlayerScript : MonoBehaviour
     private float cartJumpHeight;
     [SerializeField]
     private float cartJumpHeightHigh;
+    [SerializeField]
+    private float railPush = 2f;
 
     [SerializeField]
     [Range(0f, 1f)]
     private float lerpPct = 0.3f;
+
+    private PlayerScore playerScoreScript;
 
     private Vector2 currentPosition;
     private Vector2 startTouchPosition;
@@ -34,6 +38,7 @@ public class PlayerScript : MonoBehaviour
     private bool hasJumped = false;
     private bool hasCartJumped = false;
     private bool isFlying = false;
+    private bool isDead = false;
     private float swipeRange = 200.0f;
     private float tapRange;
 
@@ -53,16 +58,26 @@ public class PlayerScript : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        playerScoreScript = GetComponent<PlayerScore>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        transform.Translate(Vector3.forward * Time.deltaTime * speed);
-        checkTouch();
-        Move();
-        Swipe();
+        if(playerScoreScript.getLives() <= 0 && !isDead)
+        {
+            isDead = true;
+            stopTouch = true;
+            animator.Play("BoyFall");
+        }
+
+        if (!isDead)
+        {
+            transform.Translate(Vector3.forward * Time.deltaTime * speed);
+            checkTouch();
+            Move();
+            Swipe();
+        }
     }
 
     private void FixedUpdate()
@@ -156,7 +171,7 @@ public class PlayerScript : MonoBehaviour
             Vector2 Distance = currentPosition - startTouchPosition;
 
 
-            if (!stopTouch && !hasJumped && !isFlying)
+            if (!stopTouch && !hasJumped && !isFlying && !isDead)
             {
                 if(Distance.y < -swipeRange)
                 {
@@ -193,6 +208,7 @@ public class PlayerScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if(!isDead)
         switch (other.tag)
         {
             case "PickupKite":
@@ -269,14 +285,46 @@ public class PlayerScript : MonoBehaviour
                 stopTouch = true;
                 StartCoroutine(startTouch(1));
                 break;
+            case "Projectile":
+                animator.Play("BoyStumble");
+                break;
 
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if(!isDead)
+            switch (other.tag)
+            {
+                case "RoofEnd":
+                    stopTouch = true;
+                    if (transform.position.x < 0.2f && transform.position.x > -0.2f)
+                        transform.position = new Vector3(0, transform.position.y, transform.position.z);
+                    else if(transform.position.x > 0)
+                        transform.Translate(-Vector3.right * Time.deltaTime * speed);
+                    else if(transform.position.x < 0)
+                        transform.Translate(Vector3.right * Time.deltaTime * speed);
+                    break;
+            }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(!isDead)
+            switch (other.tag)
+            {
+                case "RoofEnd":
+                    stopTouch = false;
+                    break;
+            }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        switch (collision.gameObject.tag)
-        {
+        if (!isDead)
+            switch (collision.gameObject.tag)
+                {
             case "RoofPath":
                 if (hasCartJumped)
                 {
@@ -291,10 +339,10 @@ public class PlayerScript : MonoBehaviour
                 break;
 
             case "Rail":
-                if(transform.position.x > 0)
-                    rb.AddForce(Vector3.right * 2, ForceMode.Impulse);
+                if (transform.position.x > 0)
+                    transform.position = new Vector3(transform.position.x + railPush, transform.position.y, transform.position.z);
                 else
-                    rb.AddForce(-Vector3.right * 2, ForceMode.Impulse);
+                    transform.position = new Vector3(transform.position.x - railPush, transform.position.y, transform.position.z);
                 break;
         }
     }
