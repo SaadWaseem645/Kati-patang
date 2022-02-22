@@ -17,6 +17,8 @@ TagManager:
   - ObstacleLeft
   - ProjectileSummoner
   - Rail
+  - RoofEnd
+  - Projectile
   layers:
   - Default
   - TransparentFX

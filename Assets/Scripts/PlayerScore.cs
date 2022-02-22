@@ -33,7 +33,15 @@ public class PlayerScore : MonoBehaviour
                 Vector3 kiteScale = bigKite.transform.localScale;
                 bigKite.transform.localScale = new Vector3(kiteScale.x + kiteScaleSize, kiteScale.y + kiteScaleSize, kiteScale.z + kiteScaleSize);
                 break;
+            case "Projectile":
+                lives--;
+                break;
         }
+    }
+
+    public int getLives()
+    {
+        return lives;
     }
 
 }
