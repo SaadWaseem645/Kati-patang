@@ -20,10 +20,14 @@ public class PlayerScript : MonoBehaviour
     private float cartJumpHeight;
     [SerializeField]
     private float cartJumpHeightHigh;
+    [SerializeField]
+    private float railPush = 2f;
 
     [SerializeField]
     [Range(0f, 1f)]
     private float lerpPct = 0.3f;
+
+    private PlayerScore playerScoreScript;
 
     private Vector2 currentPosition;
     private Vector2 startTouchPosition;
@@ -35,6 +39,8 @@ public class PlayerScript : MonoBehaviour
     private bool stopTouch = false;
     private bool hasJumped = false;
     private bool hasCartJumped = false;
+    private bool isFlying = false;
+    private bool isDead = false;
     private float swipeRange = 200.0f;
     private float tapRange;
 
@@ -56,17 +62,31 @@ public class PlayerScript : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+
         score = kite = fly = 0;
+
+        playerScoreScript = GetComponent<PlayerScore>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        transform.Translate(Vector3.forward * Time.deltaTime * speed);
-        checkTouch();
-        Move();
-        Swipe();
+        if(playerScoreScript.getLives() <= 0 && !isDead)
+        {
+            isDead = true;
+            stopTouch = true;
+            animator.Play("BoyFall");
+        }
+
+        if (!isDead)
+        {
+            transform.Translate(Vector3.forward * Time.deltaTime * speed);
+            checkTouch();
+            Move();
+            Swipe();
+        }
     }
 
     private void FixedUpdate()
@@ -160,7 +180,7 @@ public class PlayerScript : MonoBehaviour
             Vector2 Distance = currentPosition - startTouchPosition;
 
 
-            if (!stopTouch && !hasJumped)
+            if (!stopTouch && !hasJumped && !isFlying && !isDead)
             {
                 if (Distance.y < -swipeRange)
                 {
@@ -197,6 +217,7 @@ public class PlayerScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if(!isDead)
         switch (other.tag)
         {
             case "PickupKite":
@@ -210,6 +231,7 @@ public class PlayerScript : MonoBehaviour
                     animator.Play("BoyJumpContinous");
 
                     bool jumpHigh = false;
+                    rb.velocity = Vector3.zero;
 
                     foreach (Transform child in transform)
                         if (child.CompareTag("SmallKite"))
@@ -248,8 +270,9 @@ public class PlayerScript : MonoBehaviour
                     Destroy(child.GetComponent<Rigidbody>());
                     child.parent = transform;
                     child.tag = "BigKite";
-                    child.localPosition = new Vector3(0, 4.7f, 0);
-                    child.localScale = new Vector3(120, 120, 120);
+                    isFlying = true;
+                    child.localPosition = new Vector3(0, 6f, 0);
+                    //child.localScale = new Vector3(120, 120, 120);
                     child.localEulerAngles = new Vector3(73, 0, child.localEulerAngles.z);
                     rb.useGravity = false;
                     fly += 1;
@@ -266,6 +289,19 @@ public class PlayerScript : MonoBehaviour
                 StartCoroutine(startTouch(1));
                 score -= 1;
                 break;
+            case "ObstacleLeft":
+                animator.Play("BoyShoulderHitLeft");
+                stopTouch = true;
+                StartCoroutine(startTouch(1));
+                break;
+            case "ObstacleRight":
+                animator.Play("BoyShoulderHitRight");
+                stopTouch = true;
+                StartCoroutine(startTouch(1));
+                break;
+            case "Projectile":
+                animator.Play("BoyStumble");
+                break;
 
         }
         scoreTxt.text = score.ToString();
@@ -273,10 +309,39 @@ public class PlayerScript : MonoBehaviour
         KiteTxt.text = kite.ToString();
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if(!isDead)
+            switch (other.tag)
+            {
+                case "RoofEnd":
+                    stopTouch = true;
+                    if (transform.position.x < 0.2f && transform.position.x > -0.2f)
+                        transform.position = new Vector3(0, transform.position.y, transform.position.z);
+                    else if(transform.position.x > 0)
+                        transform.Translate(-Vector3.right * Time.deltaTime * speed);
+                    else if(transform.position.x < 0)
+                        transform.Translate(Vector3.right * Time.deltaTime * speed);
+                    break;
+            }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(!isDead)
+            switch (other.tag)
+            {
+                case "RoofEnd":
+                    stopTouch = false;
+                    break;
+            }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        switch (collision.gameObject.tag)
-        {
+        if (!isDead)
+            switch (collision.gameObject.tag)
+                {
             case "RoofPath":
                 if (hasCartJumped)
                 {
@@ -288,6 +353,13 @@ public class PlayerScript : MonoBehaviour
                         if (child.CompareTag("SmallKite"))
                             Destroy(child.gameObject);
                 }
+                break;
+
+            case "Rail":
+                if (transform.position.x > 0)
+                    transform.position = new Vector3(transform.position.x + railPush, transform.position.y, transform.position.z);
+                else
+                    transform.position = new Vector3(transform.position.x - railPush, transform.position.y, transform.position.z);
                 break;
         }
     }
