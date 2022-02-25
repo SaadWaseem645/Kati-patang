@@ -39,6 +39,7 @@ public class PlayerScript : MonoBehaviour
     private bool hasCartJumped = false;
     private bool isFlying = false;
     private bool isDead = false;
+    private bool hasWon = false;
     private float swipeRange = 200.0f;
     private float tapRange;
 
@@ -71,7 +72,7 @@ public class PlayerScript : MonoBehaviour
             animator.Play("BoyFall");
         }
 
-        if (!isDead)
+        if (!isDead && !hasWon)
         {
             transform.Translate(Vector3.forward * Time.deltaTime * speed);
             checkTouch();
@@ -88,7 +89,7 @@ public class PlayerScript : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (transform.rotation.y != 0)
+        if (transform.rotation.y != 0 && !hasWon)
         {
 
             float rotationOffset = 0;
@@ -288,6 +289,19 @@ public class PlayerScript : MonoBehaviour
             case "Projectile":
                 animator.Play("BoyStumble");
                 break;
+            case "2x":
+            case "3x":
+            case "5x":
+            case "7x":
+            case "10x":
+                    animator.Play("BoyDance");
+                    transform.eulerAngles = new Vector3(transform.eulerAngles.x, 180f, transform.eulerAngles.z);
+                    stopTouch = true;
+                    hasWon = true;
+                    foreach (Transform child in transform)
+                        if (child.CompareTag("BigKite"))
+                            Destroy(child.gameObject);
+                    break;
 
         }
     }
