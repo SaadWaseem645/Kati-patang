@@ -24,6 +24,7 @@ TagManager:
   - 5x
   - 7x
   - 10x
+  - Bad
   layers:
   - Default
   - TransparentFX
