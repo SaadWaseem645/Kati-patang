@@ -280,7 +280,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.36, y: 2.03, z: 0.19933091}
+  m_Size: {x: 0.83, y: 1.7, z: 0.19933091}
   m_Center: {x: 0, y: -0.24, z: 0}
 --- !u!54 &8634150187928602951
 Rigidbody:
@@ -455,7 +455,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1342882873020259973, guid: f8fe6e3726c697d48b4de5ec579e9da2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f8fe6e3726c697d48b4de5ec579e9da2, type: 3}
 --- !u!4 &6522599031064949768 stripped
 Transform:

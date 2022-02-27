@@ -19,7 +19,9 @@ public class ProjectileScript : MonoBehaviour
         switch (other.tag)
         {
             case "ProjectileSummoner":
-                GameObject projectile = Instantiate(projectiles[Random.Range(0,7)], transform.position + new Vector3(0,verticalOffset,appearDistance), Quaternion.identity);
+                int chappalNumber = Random.Range(0, 7);
+                Debug.Log("Chappal"+chappalNumber);
+                GameObject projectile = Instantiate(projectiles[chappalNumber], transform.position + new Vector3(0,verticalOffset,appearDistance), Quaternion.identity);
                 SimpleForwardMotionScript script = projectile.GetComponent<SimpleForwardMotionScript>();
                 script.setDestructionDistance(destructionDistance);
                 break;
