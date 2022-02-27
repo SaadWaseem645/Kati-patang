@@ -253,7 +253,23 @@ public class PlayerScript : MonoBehaviour
 
                 other.gameObject.SetActive(false);
                 break;
-            case "BigKite":
+                case "FlyKite":
+                    animator.Play("BoyFlying");
+                    foreach (Transform child in other.transform)
+                    {
+                        Destroy(child.GetComponent<Rigidbody>());
+                        child.parent = transform;
+                        child.tag = "FlyKite";
+                        isFlying = true;
+                        child.localPosition = new Vector3(0, 6f, 0);
+                        child.localEulerAngles = new Vector3(73, 0, child.localEulerAngles.z);
+                        rb.useGravity = false;
+                    }
+                    StartCoroutine(startRun(2));
+                    other.gameObject.SetActive(false);
+                    break;
+
+                case "BigKite":
                 animator.Play("BoyFlying");
                 foreach (Transform child in other.transform)
                 {
@@ -372,6 +388,17 @@ public class PlayerScript : MonoBehaviour
     {
         yield return new WaitForSeconds(secs);
         stopTouch = false;
+    }
+
+    IEnumerator startRun(int secs)
+    {
+        yield return new WaitForSeconds(secs);
+        rb.useGravity = true;
+        isFlying = false;
+        animator.Play("BoyRunning");
+        foreach (Transform child in transform)
+            if (child.CompareTag("FlyKite"))
+                Destroy(child.gameObject);
     }
 
     IEnumerator startTouchSlide(int secs)

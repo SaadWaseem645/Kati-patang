@@ -25,6 +25,7 @@ TagManager:
   - 7x
   - 10x
   - Bad
+  - FlyKite
   layers:
   - Default
   - TransparentFX
