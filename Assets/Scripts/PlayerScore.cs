@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerScore : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class PlayerScore : MonoBehaviour
     private AudioClip obstacleClip;
     [SerializeField]
     private AudioClip projectileClip;
+    [SerializeField]
+    private TMPro.TextMeshProUGUI text;
+    [SerializeField]
+    private TMPro.TextMeshProUGUI liveText;
 
     private int lives = 3;
     private int score = 0;
@@ -31,8 +36,9 @@ public class PlayerScore : MonoBehaviour
     }
 
     void Update()
-    { 
-        
+    {
+        text.text = score.ToString();
+        liveText.text = lives.ToString();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -59,6 +65,21 @@ public class PlayerScore : MonoBehaviour
                 bad1.transform.parent = transform;
                 lives--;
                 break;
+            case "2x":
+                score *= 2;
+                break;
+            case "3x":
+                score *= 3;
+                break;
+            case "5x":
+                score *= 5;
+                break;
+            case "7x":
+                score *= 7;
+                break;
+            case "10x":
+                score *= 10;
+                break;
         }
     }
 
@@ -66,5 +87,6 @@ public class PlayerScore : MonoBehaviour
     {
         return lives;
     }
+
 
 }

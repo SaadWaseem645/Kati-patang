@@ -6,6 +6,7 @@ public class SmallKiteScript : MonoBehaviour
 {
     [SerializeField]
     private GameObject player;
+    private PlayerScript playerScript;
 
     [SerializeField]
     private float fastSpeed;
@@ -25,6 +26,7 @@ public class SmallKiteScript : MonoBehaviour
 
     void Start()
     {
+        playerScript = player.GetComponent<PlayerScript>();
         speed = fastSpeed;
         InvokeRepeating("rotateKite", 2.0f, 1.0f/60.0f);
     }
@@ -37,7 +39,7 @@ public class SmallKiteScript : MonoBehaviour
         else
             speed = fastSpeed;
 
-        if (!stopped)
+        if (!stopped && playerScript.isGameStarted())
         {
             if (motionDirection.Equals("forward"))
                 transform.Translate(Vector3.forward * Time.deltaTime * speed, Space.World);
