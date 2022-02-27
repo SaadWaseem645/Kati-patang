@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
+using UnityEngine.UI;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class PlayerScript : MonoBehaviour
@@ -41,6 +42,8 @@ public class PlayerScript : MonoBehaviour
     private bool isDead = false;
     private bool hasWon = false;
     private bool stopCamera = false;
+    private bool gameStarted = false;
+    private bool winSequence = false;
     private float swipeRange = 200.0f;
     private float tapRange;
 
@@ -49,6 +52,13 @@ public class PlayerScript : MonoBehaviour
     private float kiteScaleSize = 0.024f;
 
     private Rigidbody rb;
+
+    [SerializeField]
+    private Button button;
+    [SerializeField]
+    private Button nextButton;
+    [SerializeField]
+    private RawImage image;
 
     private int position = 0;
 
@@ -70,6 +80,12 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(hasWon && !winSequence)
+        {
+            nextButton.gameObject.SetActive(true);
+            winSequence = true;
+        }
+
         if(playerScoreScript.getLives() <= 0 && !isDead)
         {
             isDead = true;
@@ -77,7 +93,7 @@ public class PlayerScript : MonoBehaviour
             animator.Play("BoyFall");
         }
 
-        if (!isDead && !hasWon)
+        if (!isDead && !hasWon && gameStarted)
         {
             transform.Translate(Vector3.forward * Time.deltaTime * speed);
             checkTouch();
@@ -94,6 +110,14 @@ public class PlayerScript : MonoBehaviour
     {
        
         //Swipe();
+    }
+
+    public void startGame()
+    {
+        gameStarted = true;
+        button.gameObject.SetActive(false);
+        image.gameObject.SetActive(false);
+        animator.Play("BoyRunning");
     }
 
     private void LateUpdate()
@@ -282,6 +306,7 @@ public class PlayerScript : MonoBehaviour
                 break;
                 case "FlyKite":
                     animator.Play("BoyFlying");
+                    rb.velocity = Vector3.zero;
                     foreach (Transform child in other.transform)
                     {
                         Destroy(child.GetComponent<Rigidbody>());
@@ -408,6 +433,11 @@ public class PlayerScript : MonoBehaviour
     public bool isStopCamera()
     {
         return stopCamera;
+    }
+
+    public bool isGameStarted()
+    {
+        return gameStarted;
     }
 
     IEnumerator resetSpeed(int secs)
