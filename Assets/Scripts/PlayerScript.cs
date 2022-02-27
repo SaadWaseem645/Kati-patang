@@ -40,8 +40,13 @@ public class PlayerScript : MonoBehaviour
     private bool isFlying = false;
     private bool isDead = false;
     private bool hasWon = false;
+    private bool stopCamera = false;
     private float swipeRange = 200.0f;
     private float tapRange;
+
+    private GameObject finalKite = null;
+    [SerializeField]
+    private float kiteScaleSize = 0.024f;
 
     private Rigidbody rb;
 
@@ -79,6 +84,10 @@ public class PlayerScript : MonoBehaviour
             Move();
             Swipe();
         }
+
+        if (finalKite != null && !hasWon)
+            reduceKiteSize();
+
     }
 
     private void FixedUpdate()
@@ -177,7 +186,7 @@ public class PlayerScript : MonoBehaviour
                 if(Distance.y < -swipeRange)
                 {
                     //animator.Play("BoySlideDemo");
-                    Debug.Log("Down");
+                    //Debug.Log("Down");
                     //transform.Translate(Vector2.up * -0.2f);
                     //stopTouch = true;
                     //hasJumped = true;
@@ -185,7 +194,7 @@ public class PlayerScript : MonoBehaviour
                 else if (Distance.y > swipeRange)
                 {
                     animator.Play("BoyJump");
-                    Debug.Log("Up");
+                    //Debug.Log("Up");
                     stopTouch = true;
                     hasJumped = true;
                     rb.velocity = Vector3.up * jumpHeight;
@@ -198,6 +207,24 @@ public class PlayerScript : MonoBehaviour
         if(Touch.activeTouches.Count > 0 && Touch.activeTouches[0].phase == UnityEngine.InputSystem.TouchPhase.Ended)
         {
             hasJumped = false;
+        }
+    }
+
+    private void reduceKiteSize()
+    {
+        Vector3 kiteScale = finalKite.transform.localScale;
+        float scale = kiteScaleSize * Time.deltaTime;
+        finalKite.transform.localScale = new Vector3(kiteScale.x - scale, kiteScale.y - scale, kiteScale.z - scale);
+        if(finalKite.transform.localScale.x <= 184)
+        {
+            rb.useGravity = true;
+            stopCamera = true;
+            animator.Play("BoyJumpContinous");
+            hasWon = true;
+          
+            transform.Translate(-Vector3.up * Time.deltaTime * speed);
+            finalKite.transform.localPosition = new Vector3(0, 3.5f, -2);
+            finalKite.transform.localEulerAngles = new Vector3(0, 0, finalKite.transform.localEulerAngles.z);
         }
     }
 
@@ -275,6 +302,7 @@ public class PlayerScript : MonoBehaviour
                 {
                     Destroy(child.GetComponent<Rigidbody>());
                     child.parent = transform;
+                    finalKite = child.gameObject;
                     child.tag = "BigKite";
                     isFlying = true;
                     child.localPosition = new Vector3(0, 6f, 0);
@@ -375,6 +403,11 @@ public class PlayerScript : MonoBehaviour
                     transform.position = new Vector3(transform.position.x - railPush, transform.position.y, transform.position.z);
                 break;
         }
+    }
+
+    public bool isStopCamera()
+    {
+        return stopCamera;
     }
 
     IEnumerator resetSpeed(int secs)
