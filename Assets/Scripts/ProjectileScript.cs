@@ -20,7 +20,7 @@ public class ProjectileScript : MonoBehaviour
         {
             case "ProjectileSummoner":
                 int chappalNumber = Random.Range(0, 7);
-                Debug.Log("Chappal"+chappalNumber);
+                //Debug.Log("Chappal"+chappalNumber);
                 GameObject projectile = Instantiate(projectiles[chappalNumber], transform.position + new Vector3(0,verticalOffset,appearDistance), Quaternion.identity);
                 SimpleForwardMotionScript script = projectile.GetComponent<SimpleForwardMotionScript>();
                 script.setDestructionDistance(destructionDistance);

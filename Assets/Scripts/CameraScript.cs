@@ -8,6 +8,8 @@ public class CameraScript : MonoBehaviour
     [SerializeField]
     private GameObject player;
 
+    private PlayerScript playerScript;
+
     private Vector3 offsetPosition;
 
     [SerializeReference]
@@ -17,13 +19,14 @@ public class CameraScript : MonoBehaviour
     void Start()
     {
         offsetPosition = transform.position - player.transform.position;
+        playerScript = player.GetComponent<PlayerScript>();
         //Debug.Log(offsetPosition);
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        if (player != null)
+        if (player != null && !playerScript.isStopCamera())
             transform.position = (new Vector3(player.transform.position.x * cameraPositionMultiplier, player.transform.position.y * 1f, player.transform.position.z * 1f)) + offsetPosition;
         //transform.position = player.transform.position + offsetPosition;
     }
