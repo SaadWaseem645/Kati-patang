@@ -44,6 +44,7 @@ public class PlayerScript : MonoBehaviour
     private bool stopCamera = false;
     private bool gameStarted = false;
     private bool winSequence = false;
+    private bool endSequence = false;
     private float swipeRange = 200.0f;
     private float tapRange;
 
@@ -58,9 +59,12 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     private Button nextButton;
     [SerializeField]
+    private Slider slider;
+    [SerializeField]
     private RawImage image;
 
     private int position = 0;
+    private float kiteFinalScale = 184;
 
     private void Awake()
     {
@@ -84,6 +88,14 @@ public class PlayerScript : MonoBehaviour
         {
             nextButton.gameObject.SetActive(true);
             winSequence = true;
+        }
+
+        if(finalKite != null && !endSequence)
+        {
+            endSequence = true;
+            slider.gameObject.SetActive(true);
+            slider.maxValue = finalKite.transform.localScale.x;
+            slider.minValue = kiteFinalScale;
         }
 
         if(playerScoreScript.getLives() <= 0 && !isDead)
@@ -239,16 +251,20 @@ public class PlayerScript : MonoBehaviour
         Vector3 kiteScale = finalKite.transform.localScale;
         float scale = kiteScaleSize * Time.deltaTime;
         finalKite.transform.localScale = new Vector3(kiteScale.x - scale, kiteScale.y - scale, kiteScale.z - scale);
-        if(finalKite.transform.localScale.x <= 184)
+        slider.value = finalKite.transform.localScale.x;
+        if(finalKite.transform.localScale.x <= kiteFinalScale)
         {
-            rb.useGravity = true;
-            stopCamera = true;
-            animator.Play("BoyJumpContinous");
-            hasWon = true;
-          
+            if (!hasWon)
+            {
+                rb.useGravity = true;
+                stopCamera = true;
+                animator.Play("BoyJumpContinous");
+                hasWon = true;
+
+                finalKite.transform.localEulerAngles = new Vector3(0, 0, finalKite.transform.localEulerAngles.z);
+                finalKite.transform.localPosition = new Vector3(0, 3.5f, -2);
+            }
             transform.Translate(-Vector3.up * Time.deltaTime * speed);
-            finalKite.transform.localPosition = new Vector3(0, 3.5f, -2);
-            finalKite.transform.localEulerAngles = new Vector3(0, 0, finalKite.transform.localEulerAngles.z);
         }
     }
 
