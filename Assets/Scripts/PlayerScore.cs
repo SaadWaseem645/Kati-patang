@@ -26,6 +26,8 @@ public class PlayerScore : MonoBehaviour
     private TMPro.TextMeshProUGUI text;
     [SerializeField]
     private TMPro.TextMeshProUGUI liveText;
+    [SerializeField]
+    private GameObject kiteParticle;
 
     private int lives = 3;
     private int score = 0;
@@ -52,6 +54,7 @@ public class PlayerScore : MonoBehaviour
                 lives--;
                 break;
             case "PickupKite":
+                kiteParticle.GetComponent<ParticleSystem>().Play();
                 audioSource.PlayOneShot(pointClip);
                 score++;
                 GameObject good = Instantiate(reactionsGood[0], transform.position + new Vector3(0, 2f, 0), Quaternion.identity);

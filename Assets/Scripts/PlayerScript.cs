@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
@@ -43,6 +44,7 @@ public class PlayerScript : MonoBehaviour
     private bool hasWon = false;
     private bool stopCamera = false;
     private bool gameStarted = false;
+    private bool deadSequence = false;
     private bool winSequence = false;
     private bool endSequence = false;
     private float swipeRange = 200.0f;
@@ -58,6 +60,8 @@ public class PlayerScript : MonoBehaviour
     private Button button;
     [SerializeField]
     private Button nextButton;
+    [SerializeField]
+    private Button retryButton;
     [SerializeField]
     private Slider slider;
     [SerializeField]
@@ -79,6 +83,10 @@ public class PlayerScript : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         playerScoreScript = GetComponent<PlayerScore>();
+
+        if (SceneModel.gameStarted)
+            startGame();
+        else SceneModel.gameStarted = true;
     }
 
     // Update is called once per frame
@@ -88,6 +96,12 @@ public class PlayerScript : MonoBehaviour
         {
             nextButton.gameObject.SetActive(true);
             winSequence = true;
+        }
+
+        if(isDead && !deadSequence)
+        {
+            retryButton.gameObject.SetActive(true);
+            deadSequence = true;
         }
 
         if(finalKite != null && !endSequence)
@@ -122,6 +136,17 @@ public class PlayerScript : MonoBehaviour
     {
        
         //Swipe();
+    }
+
+    public void restartScreen()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void nextLevel()
+    {
+
+        SceneManager.LoadScene("Level"+(++SceneModel.level));
     }
 
     public void startGame()
