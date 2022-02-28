@@ -140,6 +140,7 @@ public class PlayerScript : MonoBehaviour
 
     public void restartScreen()
     {
+        Debug.Log(SceneManager.GetActiveScene().name);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
